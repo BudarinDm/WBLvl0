@@ -12,4 +12,5 @@ type Item struct {
 	NmID        uint   `json:"nm_id" db:"nm_id"`
 	Brand       string `json:"brand" db:"brand"`
 	Status      int    `json:"status" db:"status"`
+	OrderUid    string `json:"order_uid" db:"order_uid"`
 }

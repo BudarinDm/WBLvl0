@@ -17,8 +17,16 @@ func NewOrderPostgres(db *sqlx.DB) *OrderPostgres {
 func (r *OrderPostgres) GetOrder(uid string) (model.Order, error) {
 	var order model.Order
 
-	query := fmt.Sprintf("SELECT * FROM orders WHERE order_uid=$1")
+	query := fmt.Sprintf(`SELECT * FROM orders WHERE order_uid=$1`)
 	err := r.db.Get(&order, query, uid)
+
+	delivery, err := r.GetDelivery(uid)
+	items, err := r.GetItems(uid)
+	payment, err := r.GetPayments(uid)
+
+	order.Delivery = delivery
+	order.Items = items
+	order.Payment = payment
 
 	return order, err
 }
@@ -138,4 +146,31 @@ func (r *OrderPostgres) CreatePayment(payment model.Payment, uid string) error {
 	}
 
 	return nil
+}
+
+func (r *OrderPostgres) GetDelivery(uid string) (model.Delivery, error) {
+	var delivery model.Delivery
+
+	query := fmt.Sprintf("SELECT * FROM deliveries WHERE order_uid=$1")
+	err := r.db.Get(&delivery, query, uid)
+
+	return delivery, err
+}
+
+func (r *OrderPostgres) GetPayments(uid string) (model.Payment, error) {
+	var payment model.Payment
+
+	query := fmt.Sprintf("SELECT * FROM payments WHERE order_uid=$1")
+	err := r.db.Get(&payment, query, uid)
+
+	return payment, err
+}
+
+func (r *OrderPostgres) GetItems(uid string) ([]model.Item, error) {
+	var items []model.Item
+
+	query := fmt.Sprintf("SELECT * FROM items WHERE order_uid=$1")
+	err := r.db.Get(&items, query, uid)
+
+	return items, err
 }

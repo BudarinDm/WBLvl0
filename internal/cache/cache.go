@@ -24,7 +24,7 @@ func (c *Cache) GetInHandler(uid string, service *service.Service) (model.Order,
 		pqOrder, err := service.Order.GetOrder(uid)
 		c.Add(pqOrder)
 		if err != nil {
-
+			return model.Order{}, err
 		}
 		return pqOrder, nil
 	}

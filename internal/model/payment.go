@@ -11,4 +11,5 @@ type Payment struct {
 	DeliveryCost uint   `json:"delivery_cost" db:"delivery_cost"`
 	GoodsTotal   uint   `json:"goods_total" db:"goods_total"`
 	CustomFee    uint   `json:"custom_fee" db:"custom_fee"`
+	OrderUid     string `json:"order_uid" db:"order_uid"`
 }
