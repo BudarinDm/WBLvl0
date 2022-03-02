@@ -26,6 +26,10 @@ func NewNutsSubscriber(conn stan.Conn, repos *repository.Repository, cache *cach
 		err := json.Unmarshal(msg.Data, &order)
 		if err != nil {
 			log.Printf("unmarshal error: %s", err.Error())
+			err = msg.Ack()
+			if err != nil {
+				log.Printf("nats handler: %s", err.Error())
+			}
 			return
 		}
 
@@ -34,6 +38,10 @@ func NewNutsSubscriber(conn stan.Conn, repos *repository.Repository, cache *cach
 			log.Printf("create order db error: %s", err.Error())
 			return
 		}
+		err = msg.Ack()
+		if err != nil {
+			log.Printf("nats handler ask: %s", err.Error())
+		}
 		cache.Add(order)
 	}
 
@@ -41,6 +49,7 @@ func NewNutsSubscriber(conn stan.Conn, repos *repository.Repository, cache *cach
 		"order",
 		handler,
 		stan.DurableName("stand1"),
+		stan.SetManualAckMode(),
 	)
 	if err != nil {
 		log.Fatalf("create subscribe error: %s", err.Error())
