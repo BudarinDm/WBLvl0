@@ -9,7 +9,7 @@ import (
 func (h *Handler) getOrderByUID(c *gin.Context) {
 	var order model.Order
 
-	uid := c.Param("uid")
+	uid := c.Query("uid")
 
 	order, err := h.service.GetOrder(uid)
 	if err != nil {
@@ -25,4 +25,8 @@ func (h *Handler) getOrderByUID(c *gin.Context) {
 		"Address":     order.Delivery.Address,
 		"Amount":      order.Payment.Amount,
 	})
+}
+
+func (h *Handler) searchOrder(c *gin.Context) {
+	c.HTML(http.StatusOK, "searchForm.html", gin.H{})
 }

@@ -6,6 +6,14 @@
 </head>
 <body>
 <div>
+    <form>
+        <p><input placeholder="UID" name="uid"></p>
+        <p><input type="submit" value="Отправить"
+                  formaction="/api/v1/order/}" formmethod="post"></p>
+    </form>
+</div>
+
+<div>
     <h2>UID Заказа</h2>
     <h4>{{ .UID }}</h4>
     <hr>
