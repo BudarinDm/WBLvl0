@@ -1,0 +1,16 @@
+db:
+  host: "localhost"
+  port: "5432"
+  username: "wbuser"
+  password: "goodpassword"
+  dbname: "wb"
+  sslmode: "disable"
+
+httpserver:
+  port: "8000"
+
+nuts:
+  stanclusterid: "prod"
+  clientid: "sub-1"
+  durablename: "stand1"
+  chanel: "order"
