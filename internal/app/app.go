@@ -4,7 +4,9 @@ import (
 	"github.com/nats-io/stan.go"
 	"github.com/spf13/viper"
 	"log"
+	"wblvl0/internal/cache"
 	"wblvl0/internal/handler"
+	"wblvl0/internal/model"
 	"wblvl0/internal/nuts"
 	"wblvl0/internal/repository"
 	"wblvl0/internal/service"
@@ -31,19 +33,20 @@ func Run() {
 
 	newRepos := repository.NewRepository(dataBase)
 	newService := service.NewService(newRepos)
-	newHandler := handler.NewHandler(newService)
+	newCache := cache.NewCache(map[string]model.Order{})
+	newHandler := handler.NewHandler(newService, newCache)
 
-	natsConnection, err := stan.Connect(viper.GetString("nuts.stanclusterid"), viper.GetString("nuts.clientid"))
+	newNutsConnect, err := nuts.NewConnection()
 	if err != nil {
 		log.Fatalf("nuts connection error: %s", err.Error())
 	}
-	defer func(natsConnection stan.Conn) {
-		err = natsConnection.Close()
+	defer func(newNutsConnect stan.Conn) {
+		err = newNutsConnect.Close()
 		if err != nil {
 			log.Printf("close nuts error: %s", err.Error())
 		}
-	}(natsConnection)
-	nuts.NewNutsSubscriber(natsConnection, newRepos)
+	}(newNutsConnect)
+	nuts.NewNutsSubscriber(newNutsConnect, newRepos, newCache)
 
 	server := new(Server)
 	err = server.Run(viper.GetString("httpserver.port"), newHandler.InitRoutes())
