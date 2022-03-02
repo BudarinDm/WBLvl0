@@ -1,6 +1,7 @@
 package service
 
 import (
+	"wblvl0/internal/cache"
 	"wblvl0/internal/model"
 	"wblvl0/internal/repository"
 )
@@ -14,8 +15,8 @@ type Service struct {
 	Order
 }
 
-func NewService(repository *repository.Repository) *Service {
+func NewService(repository *repository.Repository, cache *cache.Cache) *Service {
 	return &Service{
-		Order: NewOrderService(repository),
+		Order: NewOrderService(repository, cache),
 	}
 }

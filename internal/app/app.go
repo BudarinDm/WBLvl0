@@ -4,9 +4,9 @@ import (
 	"github.com/nats-io/stan.go"
 	"github.com/spf13/viper"
 	"log"
+	"time"
 	"wblvl0/internal/cache"
 	"wblvl0/internal/handler"
-	"wblvl0/internal/model"
 	"wblvl0/internal/nuts"
 	"wblvl0/internal/repository"
 	"wblvl0/internal/service"
@@ -32,9 +32,9 @@ func Run() {
 	}
 
 	newRepos := repository.NewRepository(dataBase)
-	newService := service.NewService(newRepos)
-	newCache := cache.NewCache(map[string]model.Order{})
-	newHandler := handler.NewHandler(newService, newCache)
+	newCache := cache.NewCache(5*time.Minute, 10*time.Minute)
+	newService := service.NewService(newRepos, newCache)
+	newHandler := handler.NewHandler(newService)
 
 	newNutsConnect, err := nuts.NewConnection()
 	if err != nil {

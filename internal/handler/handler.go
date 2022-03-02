@@ -2,17 +2,15 @@ package handler
 
 import (
 	"github.com/gin-gonic/gin"
-	"wblvl0/internal/cache"
 	"wblvl0/internal/service"
 )
 
 type Handler struct {
 	service *service.Service
-	cache   *cache.Cache
 }
 
-func NewHandler(service *service.Service, cache *cache.Cache) *Handler {
-	return &Handler{service: service, cache: cache}
+func NewHandler(service *service.Service) *Handler {
+	return &Handler{service: service}
 }
 
 func (h *Handler) InitRoutes() *gin.Engine {

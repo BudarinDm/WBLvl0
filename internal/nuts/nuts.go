@@ -38,11 +38,11 @@ func NewNutsSubscriber(conn stan.Conn, repos *repository.Repository, cache *cach
 			log.Printf("create order db error: %s", err.Error())
 			return
 		}
+		cache.Set(order.UID, order)
 		err = msg.Ack()
 		if err != nil {
 			log.Printf("nats handler ask: %s", err.Error())
 		}
-		cache.Add(order)
 	}
 
 	sub, err := conn.Subscribe(

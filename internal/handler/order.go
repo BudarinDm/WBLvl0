@@ -3,7 +3,6 @@ package handler
 import (
 	"github.com/gin-gonic/gin"
 	"net/http"
-	"reflect"
 	"wblvl0/internal/model"
 )
 
@@ -12,11 +11,8 @@ func (h *Handler) getOrderByUID(c *gin.Context) {
 
 	uid := c.Param("uid")
 
-	order, err := h.cache.GetInHandler(uid, h.service)
+	order, err := h.service.GetOrder(uid)
 	if err != nil {
-
-	}
-	if reflect.ValueOf(order).IsZero() {
 		c.HTML(http.StatusBadRequest, "errorForm.html", gin.H{
 			"UID": uid,
 		})
