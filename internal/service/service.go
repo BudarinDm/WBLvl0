@@ -6,6 +6,8 @@ import (
 	"wblvl0/internal/repository"
 )
 
+//go:generate mockgen -source=service.go -destination=mocks/mock.go
+
 type Order interface {
 	CreateOrder(order model.Order) (string, error)
 	GetOrder(uid string) (model.Order, error)
