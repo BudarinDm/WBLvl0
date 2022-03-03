@@ -63,7 +63,7 @@ func main() {
 
 		//badJson := "{fdsfsdf: sdfsdfdsf , affsasfsfa}"
 
-		time.Sleep(2 * time.Second)
+		time.Sleep(4 * time.Second)
 		sc.Publish("order", []byte(json))
 
 		//if i%5 == 2 {
