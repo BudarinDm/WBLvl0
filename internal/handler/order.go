@@ -10,6 +10,12 @@ func (h *Handler) getOrderByUID(c *gin.Context) {
 	var order model.Order
 
 	uid := c.Query("uid")
+	if uid == "" {
+		c.HTML(http.StatusBadRequest, "errorForm.html", gin.H{
+			"UID": uid,
+		})
+		return
+	}
 
 	order, err := h.service.GetOrder(uid)
 	if err != nil {
